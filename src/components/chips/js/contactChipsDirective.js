@@ -66,7 +66,7 @@ var MD_CONTACT_CHIPS_TEMPLATE = '\
               md-autoselect\
               placeholder="{{$mdContactChipsCtrl.contacts.length == 0 ?\
                   $mdContactChipsCtrl.placeholder : $mdContactChipsCtrl.secondaryPlaceholder}}">\
-            <div class="md-contact-suggestion">\
+            <div class="md-contact-suggestion" md-contact-chips-autocomplete-scope>\
               <img \
                   ng-src="{{item[$mdContactChipsCtrl.contactImage]}}"\
                   alt="{{item[$mdContactChipsCtrl.contactName]}}" />\
