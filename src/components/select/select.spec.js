@@ -83,31 +83,18 @@ describe('<md-select>', function() {
 
   function waitForSelectOpen() {
     try {
-      inject(function($rootScope, $timeout, $$rAF) {
-          $rootScope.$digest();
-
-            $$rAF.flush();  // flush $animate.enter(backdrop)
-          $timeout.flush(); // flush response
-            $$rAF.flush();  // flush $animateCss
-          $timeout.flush(); // flush response
-
-          $rootScope.$digest();
+      inject(function($animate) {
+        $animate.flush();
+        $animate.flush();
       });
     } catch(e) { }
   }
 
   function waitForSelectClose() {
     try {
-      inject(function($rootScope, $timeout, $$rAF) {
-          $rootScope.$digest();
-
-          $$rAF.flush();    // flush $animate.leave(backdrop)
-          $timeout.flush(); // flush response
-
-          $rootScope.$digest();
-
-          $$rAF.flush();
-          $rootScope.$digest();
+      inject(function($animate) {
+        $animate.flush();
+        $animate.flush();
       });
     } catch(e) { }
   }

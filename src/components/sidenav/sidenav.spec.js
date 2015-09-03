@@ -19,12 +19,12 @@ describe('mdSidenav', function() {
       var el = setup('md-is-open="show"');
       $rootScope.$apply('show = true');
 
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(el.hasClass('md-closed')).toBe(false);
       expect(el.parent().find('md-backdrop').length).toBe(1);
 
       $rootScope.$apply('show = false');
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(el.hasClass('md-closed')).toBe(true);
       expect(el.parent().find('md-backdrop').length).toBe(0);
     }));
@@ -33,7 +33,7 @@ describe('mdSidenav', function() {
       var el = setup('md-is-open="show"');
       $rootScope.$apply('show = true');
 
-      $animate.triggerCallbacks();
+      $animate.flush();
       el.parent().triggerHandler({
         type: 'keydown',
         keyCode: $mdConstant.KEY_CODE.ESCAPE
@@ -46,7 +46,7 @@ describe('mdSidenav', function() {
       var el = setup('md-is-open="show"');
       $rootScope.$apply('show = true');
 
-      $animate.triggerCallbacks();
+      $animate.flush();
       el.parent().find('md-backdrop').triggerHandler('click');
       $timeout.flush();
       expect($rootScope.show).toBe(false);
@@ -57,7 +57,7 @@ describe('mdSidenav', function() {
       var el = setup('md-is-open="show"');
       $rootScope.$apply('show = true');
 
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect($document.activeElement).toBe(el[0]);
     }));
 
@@ -75,7 +75,7 @@ describe('mdSidenav', function() {
       $rootScope.$apply('show = true');
 
       var focusEl = sidenavEl.find('input');
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect($document.activeElement).toBe(focusEl[0]);
     }));
 
@@ -93,7 +93,7 @@ describe('mdSidenav', function() {
       $rootScope.$apply('show = true');
 
       var focusEl = sidenavEl.find('input');
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect($document.activeElement).toBe(focusEl[0]);
     }));
 
@@ -112,7 +112,7 @@ describe('mdSidenav', function() {
       $compile(parent)($rootScope);
       $rootScope.$apply('show = true');
 
-      $animate.triggerCallbacks();
+      $animate.flush();
       var focusEl = sidenavEl.find('input');
       expect($document.activeElement).toBe(focusEl[0]);
     }));
@@ -123,7 +123,7 @@ describe('mdSidenav', function() {
       $rootScope.$apply('lock = true');
       expect(el.hasClass('md-locked-open')).toBe(true);
       $rootScope.$apply('show = true');
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(el.parent().find('md-backdrop').hasClass('md-locked-open')).toBe(true);
     }));
 
@@ -177,10 +177,7 @@ describe('mdSidenav', function() {
     var $animate, $rootScope;
 
       function flush() {
-        if ( !$rootScope.$$phase) {
-          $rootScope.$apply();
-        }
-        $animate.triggerCallbacks();
+        $animate.flush();
       }
 
     beforeEach( inject(function(_$animate_,_$rootScope_,_$timeout_) {

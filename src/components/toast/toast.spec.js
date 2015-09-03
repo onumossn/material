@@ -3,23 +3,19 @@ describe('$mdToast service', function() {
   beforeEach(module('material.components.toast'));
 
   afterEach(inject(function($timeout, $animate) {
-    $animate.triggerCallbacks();
-    $timeout.flush();
+    $animate.flush();
   }));
 
   function setup(options) {
     var promise;
-    inject(function($mdToast, $rootScope, $$rAF, $timeout) {
+    inject(function($mdToast, $rootScope, $$rAF, $timeout, $animate) {
       options = options || {};
 
       $$rAF.flush();
 
       promise = $mdToast.show(options);
 
-      $rootScope.$digest();
-      $$rAF.flush();
-      $timeout.flush();
-
+      $animate.flush();
     });
     return promise;
   }
@@ -38,15 +34,17 @@ describe('$mdToast service', function() {
           capsule: true
         })
       ).then(function() {
-          openAndclosed = true;
+        openAndclosed = true;
       });
-      $rootScope.$digest();
+
+      $animate.flush();
+
       expect(parent.find('span').text()).toBe('Do something');
       expect(parent.find('md-toast')).toHaveClass('md-capsule');
       expect(parent.find('md-toast').attr('md-theme')).toBe('some-theme');
-      $animate.triggerCallbacks();
-      $timeout.flush();
-      $animate.triggerCallbacks();
+
+      $animate.flush();
+
       expect(openAndclosed).toBe(true);
     }));
 
@@ -72,13 +70,11 @@ describe('$mdToast service', function() {
       ).then(function() {
         resolved = true;
       });
-      $rootScope.$digest();
-      $animate.triggerCallbacks();
+      $animate.flush();
       var button = parent.find('button');
       expect(button.text()).toBe('Click me');
       button.triggerHandler('click');
-      $rootScope.$digest();
-      $animate.triggerCallbacks();
+      $animate.flush();
       expect(resolved).toBe(true);
     }));
 
@@ -173,7 +169,7 @@ describe('$mdToast service', function() {
   describe('lifecycle', function() {
 
     describe('should hide',function() {
-      it('current toast when showing new one', inject(function($rootElement) {
+      it('current toast when showing new one', inject(function($rootElement, $animate) {
         disableAnimations();
 
         setup({
@@ -194,6 +190,7 @@ describe('$mdToast service', function() {
         setup({
           template: '<md-toast class="three">'
         });
+        $animate.flush();
         expect($rootElement[0].querySelector('md-toast.one')).toBeFalsy();
         expect($rootElement[0].querySelector('md-toast.two')).toBeFalsy();
         expect($rootElement[0].querySelector('md-toast.three')).toBeTruthy();
@@ -227,8 +224,7 @@ describe('$mdToast service', function() {
 
         $mdToast.hide();
 
-          $timeout.flush();
-          $animate.triggerCallbacks();
+        $animate.flush();
 
         expect(result).toBe(true);
         expect(angular.isUndefined(fault)).toBe(true);
@@ -249,8 +245,7 @@ describe('$mdToast service', function() {
 
         $mdToast.hide("secret");
 
-          $timeout.flush();
-          $animate.triggerCallbacks();
+        $animate.flush();
 
         expect(result).toBe("secret");
         expect(angular.isUndefined(fault)).toBe(true);
@@ -269,8 +264,7 @@ describe('$mdToast service', function() {
           function(error){ fault = error;  }
         );
 
-        $timeout.flush();
-        $animate.triggerCallbacks();
+        $animate.flush();
 
         expect(result).toBe(true);
         expect(angular.isUndefined(fault)).toBe(true);
@@ -291,13 +285,12 @@ describe('$mdToast service', function() {
             function(response){ result = response;  },
             function(error){ fault = error;  }
           );
-        $rootScope.$digest();
-        $animate.triggerCallbacks();
+
+        $animate.flush();
 
         parent.find('button').triggerHandler('click');
 
-        $timeout.flush();
-        $animate.triggerCallbacks();
+        $animate.flush();
 
         expect(result).toBe('ok');
         expect(angular.isUndefined(fault)).toBe(true);

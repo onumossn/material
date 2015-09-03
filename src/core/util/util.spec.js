@@ -161,10 +161,4 @@ describe('util', function() {
       }));
     });
   });
-
-  function flush() {
-    $rootScope.$digest();
-    $animate.triggerCallbacks();
-    $timeout.flush();
-  }
 });

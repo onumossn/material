@@ -88,7 +88,6 @@ describe('animate', function() {
 
   function flush() {
     $rootScope.$digest();
-    $animate.triggerCallbacks();
-    $timeout.flush();
+    $animate.flush();
   }
 });

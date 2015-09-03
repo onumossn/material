@@ -17,8 +17,7 @@ describe('md-calendar', function() {
    */
   function applyDateChange() {
     pageScope.$apply();
-    $animate.triggerCallbacks();
-    $$rAF.flush();
+    $animate.flush();
 
     // Internally, the calendar sets scrollTop to scroll to the month for a change.
     // The handler for that scroll won't be invoked unless we manually trigger it.
@@ -437,7 +436,7 @@ describe('md-calendar', function() {
     controller.changeDisplayDate(laterDate);
     expect(controller.displayDate).toBeSameDayAs(earlierDate);
 
-    $animate.triggerCallbacks();
+    $animate.flush();
     controller.changeDisplayDate(laterDate);
     expect(controller.displayDate).toBeSameDayAs(laterDate);
   });

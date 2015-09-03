@@ -16,11 +16,7 @@ describe('$mdDialog', function() {
   beforeEach(inject(function($rootScope, $timeout, $$rAF, $animate) {
 
     runAnimation = function() {
-      $timeout.flush(); // flush to start animations
-      $$rAF.flush();    // flush animations
-      $animate.triggerCallbacks();
-      //$rootScope.$digest();
-      $timeout.flush(); // flush responses after animation completions
+      $animate.flush();
     }
   }));
 
@@ -153,7 +149,8 @@ describe('$mdDialog', function() {
         target: container[0]
       });
 
-      runAnimation(parent.find('md-dialog'));
+      runAnimation();
+      runAnimation();
 
       container = angular.element(parent[0].querySelector('.md-dialog-container'));
       expect(container.length).toBe(0);
@@ -264,7 +261,7 @@ describe('$mdDialog', function() {
       expect($document.activeElement).toBe(parent[0].querySelector('.dialog-close'));
     }));
 
-    it('should remove `md-dialog-container` after click outside', inject(function($mdDialog, $rootScope, $timeout) {
+    it('should remove `md-dialog-container` after click outside', inject(function($mdDialog, $rootScope, $timeout, $animate) {
       jasmine.mockElementFocus(this);
       var container, parent = angular.element('<div>');
 
@@ -288,6 +285,8 @@ describe('$mdDialog', function() {
         type: 'click',
         target: container[0]
       });
+
+      runAnimation();
       runAnimation();
 
       container = angular.element(parent[0].querySelector('.md-dialog-container'));
@@ -321,6 +320,7 @@ describe('$mdDialog', function() {
         type: 'keyup',
         keyCode: $mdConstant.KEY_CODE.ESCAPE
       });
+      runAnimation();
       runAnimation();
 
       container = angular.element(parent[0].querySelector('.md-dialog-container'));
@@ -494,6 +494,7 @@ describe('$mdDialog', function() {
         type: 'click',
         target: container[0]
       });
+      runAnimation();
       runAnimation();
 
       expect(parent.find('md-dialog').length).toBe(0);

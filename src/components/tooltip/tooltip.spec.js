@@ -97,7 +97,6 @@ describe('<md-tooltip> directive', function() {
         '</md-button>'
       );
 
-
       showTooltip(true);
 
       expect(findTooltip().length).toBe(1);
@@ -220,7 +219,7 @@ describe('<md-tooltip> directive', function() {
     $rootScope.testModel = {};
 
     $rootScope.$apply();
-    $animate.triggerCallbacks();
+    $animate.flush();
 
     return element;
   }
@@ -229,7 +228,7 @@ describe('<md-tooltip> directive', function() {
     if (angular.isUndefined(isVisible)) isVisible = true;
 
     $rootScope.$apply('testModel.isVisible = ' + (isVisible ? 'true' : 'false') );
-    $animate.triggerCallbacks();
+    $animate.flush();
   }
 
   function findTooltip() {

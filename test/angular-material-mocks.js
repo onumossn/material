@@ -32,6 +32,26 @@ angular.module('ngMaterial-mock', [
   'material.core'
   ])
   .config(['$provide', function($provide) {
+    $provide.decorator('$animate', ['$delegate', '$timeout', '$rootScope', '$injector', '$$rAF',
+                            function($delegate,   $timeout,   $rootScope,   $injector,   $$rAF) {
+
+      var asyncRun = angular.noop;
+      var asyncFlush = $injector.get('$$animateAsyncRun');
+      if (asyncFlush) {
+        asyncRun = function() {
+          asyncFlush.flush();
+        };
+      }
+      
+      $delegate.flush = function() {
+        $rootScope.$digest();
+        $$rAF.flush();
+        $timeout.flush();
+        asyncRun();
+        $rootScope.$digest();
+      }
+      return $delegate;
+    }])
 
     /**
       * Angular Material dynamically generates Style tags
@@ -69,8 +89,8 @@ angular.module('ngMaterial-mock', [
 
       var ngFlush = $delegate.flush;
       $delegate.flush = function() {
-          try      { ngFlush();  }
-          catch(e) { ;           }
+        try      { ngFlush();  }
+        catch(e) { ;           }
       };
 
       return $delegate;
@@ -92,7 +112,7 @@ angular.module('ngMaterial-mock', [
       return $delegate;
     });
 
-  }]);
+  }])
 
   /**
    * Stylesheet Mocks used by `animateCss.spec.js`

@@ -2,7 +2,7 @@ describe('$$interimElement service', function() {
 
   beforeEach(module('material.core'));
 
-  var $rootScope, $$rAF, $q, $timeout;
+  var $rootScope, $q, $timeout;
   var $compilerSpy, $themingSpy;
 
   describe('provider', function() {
@@ -58,9 +58,9 @@ describe('$$interimElement service', function() {
           onShow: function(scope, el) { onShowCalled = true; },
           onRemove: function() { onHideCalled = true; }
         });
-        $$rAF.flush();
+        $animate.flush();
         interimTest.cancel();
-        $$rAF.flush();
+        $animate.flush();
 
         expect(onShowCalled).toBe(false);
         expect(onHideCalled).toBe(false);
@@ -622,10 +622,10 @@ describe('$$interimElement service', function() {
       $provide.value('$mdCompiler', $mdCompiler);
       $provide.value('$mdTheming', $themingSpy);
     });
-    inject(function($q, $compile, _$rootScope_, _$$rAF_, _$timeout_) {
+    inject(function($q, $compile, _$rootScope_, _$timeout_, _$animate_) {
       $rootScope = _$rootScope_;
-      $$rAF = _$$rAF_;
       $timeout = _$timeout_;
+      $animate = _$animate_;
 
       $compilerSpy.and.callFake(function(opts) {
         var el = $compile(opts.template || "<div></div>");
@@ -652,13 +652,7 @@ describe('$$interimElement service', function() {
   }
 
   function flush() {
-    try {
-      $timeout.flush();
-      $rootScope.$apply();
-      $$rAF.flush();
-    } finally {
-      $timeout.flush();
-    }
+    $animate.flush();
   }
 
   function tailHook( sourceFn, hookFn ) {

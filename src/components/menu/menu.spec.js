@@ -215,23 +215,14 @@ describe('material.components.menu', function() {
   }
 
   function waitForMenuOpen() {
-    inject(function($rootScope, $$rAF, $timeout) {
-      $rootScope.$digest();
-
-        $$rAF.flush();      // flush $animate.enter(backdrop)
-        $$rAF.flush();      // flush $animateCss
-        $timeout.flush();   // flush response
-
+    inject(function($animate) {
+      $animate.flush();
     });
   }
 
   function waitForMenuClose() {
-    inject(function($rootScope, $$rAF, $timeout) {
-      $rootScope.$digest();
-
-        $$rAF.flush();      // flush $animate.leave(backdrop)
-        $$rAF.flush();      // flush $animateCss
-        $timeout.flush();   // flush response
+    inject(function($animate) {
+      $animate.flush();
     });
   }
 
