@@ -459,6 +459,26 @@ function MdDialogProvider($$interimElementProvider) {
       }
     };
 
+
+    function ariaFocus(ev) {
+      var dialog = document.querySelector('md-dialog');
+
+      if (isHidden(ev.target)) {
+        ev.stopImmediatePropagation();
+        dialog.focus();
+      }
+
+      function isHidden(element) {
+        while (element) {
+          if (element.getAttribute('aria-hidden') === 'true') {
+            return true;
+          }
+          element = element.parentElement;
+        }
+        return false;
+      }
+    }
+
     /**
      * Show method for dialogs
      */
@@ -470,6 +490,8 @@ function MdDialogProvider($$interimElementProvider) {
       captureSourceAndParent(element, options);
       configureAria(element.find('md-dialog'), options);
       showBackdrop(scope, element, options);
+
+      document.addEventListener('focus', ariaFocus, true);
 
       return dialogPopIn(element, options)
         .then(function() {
@@ -530,8 +552,9 @@ function MdDialogProvider($$interimElementProvider) {
     function onRemove(scope, element, options) {
       options.deactivateListeners();
       options.unlockScreenReader();
-
       options.hideBackdrop();
+
+      document.removeEventListener('focus', ariaFocus, true);
 
       return dialogPopOut(element, options)
         .finally(function() {
